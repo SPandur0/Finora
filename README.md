@@ -19,4 +19,4 @@ Open the localhost URL shown in the terminal.
 
 ## Demo video
 
-[INSERT DEMO VIDEO LINK HERE]
+(https://youtube.com/shorts/tf-A_R1BAlI?feature=share)
