@@ -79,7 +79,10 @@ export const months = [
 ];
 
 // null means not registered; zero is a valid registered value.
-export const initialMonthlySavings = months.map(() => null);
+export const initialMonthlySavings = [
+  85000, 92000, 98000, 105000, 111000, 118000,
+  123000, 128000, 136400, null, null, null,
+];
 
 export function updateMonthlySavings(history, monthIndex, amount) {
   return history.map((value, index) => index === monthIndex ? amount : value);

@@ -5,12 +5,14 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import HomeScreen from './screens/HomeScreen';
 import IncomeExpensesScreen from './screens/IncomeExpensesScreen';
+import SettingsScreen from './screens/SettingsScreen';
 import { FinanceProvider } from './context/FinanceContext';
 import { colors, styles } from './styles/styles';
 const Tab = createBottomTabNavigator();
 const icons = {
   Home: 'grid-outline',
-  'Income & Expenses': 'swap-horizontal-outline'
+  'Income & Expenses': 'swap-horizontal-outline',
+  Settings: 'settings-outline'
 };
 const theme = {
   ...DefaultTheme,
@@ -44,6 +46,7 @@ export default function App() {
       })}>
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Income & Expenses" component={IncomeExpensesScreen} />
+        <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
     </FinanceProvider>
