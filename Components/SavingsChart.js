@@ -1,0 +1,53 @@
+import { ScrollView, Text, View } from 'react-native';
+import Svg, { Circle, Line, Path, Text as SvgText } from 'react-native-svg';
+import { months, money, savingsHistoryPoints } from '../data/financeData';
+import { styles, colors } from '../styles/styles';
+
+export default function SavingsChart({ history }) {
+  const points = savingsHistoryPoints(history);
+  const maximum = Math.max(1, ...points.map(point => point.amount));
+  const x = monthIndex => 110 + monthIndex * 39;
+  const y = amount => 170 - (amount / maximum) * 140;
+  const path = points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${x(point.monthIndex)} ${y(point.amount)}`).join(' ');
+
+  return (
+    <View style={styles.chartCard}>
+      <Text style={styles.sectionTitle}>Savings Development</Text>
+      <Text style={styles.subtitle}>Savings + Investments · {new Date().getFullYear()}</Text>
+      {points.length === 0 ? (
+        <View style={styles.emptyState}>
+          <Text style={styles.sectionTitle}>Ingen måneder registreret</Text>
+          <Text style={styles.subtitle}>Tilføj månedlige værdier under Income & Expenses → Savings.</Text>
+        </View>
+      ) : (
+        <>
+          <Text style={styles.muted}>Total Savings (kr.) · Stryg for at se hele året</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator>
+            <View accessible accessibilityLabel={points.map(point => `${months[point.monthIndex]}: ${money(point.amount)}`).join('. ')}>
+              <Svg width={570} height={215} viewBox="0 0 570 215">
+                {[0, 0.5, 1].map(fraction => (
+                  <ReactChartTick key={fraction} amount={maximum * fraction} y={y(maximum * fraction)} />
+                ))}
+                <Path d={path} stroke={colors.green} strokeWidth={3} fill="none" strokeLinejoin="round" />
+                {points.map(point => <Circle key={point.monthIndex} cx={x(point.monthIndex)} cy={y(point.amount)} r={4} fill={colors.green} />)}
+                {months.map((month, index) => (
+                  <SvgText key={month} x={x(index)} y={194} fontSize={10} fill={colors.muted} textAnchor="middle">{month.slice(0, 3)}</SvgText>
+                ))}
+              </Svg>
+            </View>
+          </ScrollView>
+          <Text style={styles.muted}>Kun registrerede måneder vises som punkter. Linjen forbinder dem.</Text>
+        </>
+      )}
+    </View>
+  );
+}
+
+function ReactChartTick({ amount, y }) {
+  return (
+    <>
+      <Line x1={110} x2={539} y1={y} y2={y} stroke={colors.border} />
+      <SvgText x={100} y={y + 4} textAnchor="end" fontSize={10} fill={colors.muted}>{money(amount)}</SvgText>
+    </>
+  );
+}
